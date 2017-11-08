@@ -33,17 +33,9 @@
 	<div class="container">
 
 		<div class="starter-template">
-			<h2>1. Image Service & Thumbor Load Tests</h2>
-			<a href="start1" class="btn btn-primary" role="button">Start Load Test</a>
-			<br><br>
+			<h1>Image Service & Thumbor Load Tests</h1>
+			<a href="start" class="btn btn-primary" role="button">Start Load Test</a>
 		</div>
-
-		<div class="starter-template">
-        			<h2>2. Image Service Load Tests</h2>
-        			<a href="start2" class="btn btn-primary" role="button">Start Load Test</a>
-        			<br><br>
-        		</div>
-
 
 	</div>
 

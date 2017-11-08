@@ -36,23 +36,9 @@
 	<div class="container">
 
 		<div class="starter-template">
-			<h2>Load tests completed</h2>
+			<h1>Load tests completed</h1>
 			<a href="/" class="btn btn-primary" role="button">Main Page</a>
-			<br><br>
 		</div>
-
-		<div class="starter-template">
-        			<h3>Grafana Tentacle Application Metrics for image-service deployment</h3>
-        			<a href="http://grafana.tools.appdev.io/dashboard/file/Tentacle%20Application%20Metrics.json?orgId=1&var-namespace=development&var-deployment=image-service&var-pod=All&var-target=All"
-        			class="btn btn-default" role="button">Show Grafana Metrics</a>
-        			<br><br>
-        		</div>
-
-        <div class="starter-template">
-                			<h3>Grafana Deployment Metrics for image-service</h3>
-                			<a href="http://grafana.tools.appdev.io/dashboard/file/Deployment.json?refresh=10s&orgId=1&var-namespace=development&var-deployment=image-service&var-node=All"
-                			class="btn btn-default" role="button">Show Grafana Metrics</a>
-                		</div>
 
 	</div>
 
