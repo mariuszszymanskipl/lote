@@ -1,0 +1,37 @@
+{
+  "kind": "Ingress",
+  "apiVersion": "extensions/v1beta1",
+  "metadata": {
+    "name": "image-service-load-test",
+    "namespace": "development"
+  },
+  "spec": {
+    "rules": [
+      {
+        "host": "image-service-load-test.development.appdev.io",
+        "http": {
+          "paths": [
+            {
+              "backend": {
+                "serviceName": "image-service-load-test",
+                "servicePort": 8080
+              }
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "status": {
+    "loadBalancer": {
+      "ingress": [
+        {
+          "ip": "52.59.220.209"
+        },
+        {
+          "ip": "54.93.241.130"
+        }
+      ]
+    }
+  }
+}
