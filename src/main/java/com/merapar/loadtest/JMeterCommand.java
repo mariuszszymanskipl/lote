@@ -6,7 +6,10 @@ import java.io.InputStreamReader;
 
 public class JMeterCommand {
 
-    public static void run1() throws java.io.IOException, InterruptedException {
+    public static void runLoadTest1() throws java.io.IOException, InterruptedException {
+
+        System.out.println("Removing old HTTP report");
+        removeOldHTMLReport();
 
         try {
             String[] cmdArray = new String[6];
@@ -22,19 +25,19 @@ public class JMeterCommand {
 
             Process process = Runtime.getRuntime().exec(cmdArray, null);
 
-            BufferedReader in = new BufferedReader(
-                    new InputStreamReader(process.getInputStream()));
-            String line = null;
-            while ((line = in.readLine()) != null) {
-                System.out.println(line);
-            }
+            systemPrintLnOut(process);
+
+            generateHTMLReport();
 
         } catch (IOException ex) {
             ex.printStackTrace();
         }
     }
 
-    public static void run2() throws java.io.IOException, InterruptedException {
+    public static void runLoadTest2() throws java.io.IOException, InterruptedException {
+
+        System.out.println("Removing old HTTP report");
+        removeOldHTMLReport();
 
         try {
             String[] cmdArray = new String[6];
@@ -50,12 +53,7 @@ public class JMeterCommand {
 
             Process process = Runtime.getRuntime().exec(cmdArray, null);
 
-            BufferedReader in = new BufferedReader(
-                    new InputStreamReader(process.getInputStream()));
-            String line = null;
-            while ((line = in.readLine()) != null) {
-                System.out.println(line);
-            }
+            systemPrintLnOut(process);
 
             generateHTMLReport();
 
@@ -64,7 +62,10 @@ public class JMeterCommand {
         }
     }
 
-    public static void run3(JMeterParameters parameters) throws java.io.IOException, InterruptedException {
+    public static void runLoadTest3(JMeterParameters parameters) throws java.io.IOException, InterruptedException {
+
+        System.out.println("Removing old HTTP report");
+        removeOldHTMLReport();
 
         try {
             String[] cmdArray = new String[8];
@@ -82,12 +83,9 @@ public class JMeterCommand {
 
             Process process = Runtime.getRuntime().exec(cmdArray, null);
 
-            BufferedReader in = new BufferedReader(
-                    new InputStreamReader(process.getInputStream()));
-            String line = null;
-            while ((line = in.readLine()) != null) {
-                System.out.println(line);
-            }
+            systemPrintLnOut(process);
+
+            generateHTMLReport();
 
         } catch (IOException ex) {
             ex.printStackTrace();
@@ -96,7 +94,7 @@ public class JMeterCommand {
 
     private static void generateHTMLReport() {
 
-        System.out.println("Generating HTTP Report");
+        System.out.println("Generating new HTTP Report");
 
         try {
             String[] cmdArray = new String[5];
@@ -109,19 +107,35 @@ public class JMeterCommand {
 
             Process process = Runtime.getRuntime().exec(cmdArray, null);
 
-            BufferedReader in = new BufferedReader(
-                    new InputStreamReader(process.getInputStream()));
-            String line = null;
-            while ((line = in.readLine()) != null) {
-                System.out.println(line);
-            }
+            systemPrintLnOut(process);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
 
-//        path to report: "/test/results/report.csv"
-//        path to report folder: "/test/results/HTTPReport"
-//        exec:  jmeter -g /test/results/report.scv -o /test/results/HTTPReport
+    private static void removeOldHTMLReport() {
+        try {
+            String[] cmdArray = new String[3];
+
+            cmdArray[0] = "rm";
+            cmdArray[1] = "-r";
+            cmdArray[2] = "results";
+
+            Process process = Runtime.getRuntime().exec(cmdArray, null);
+
+            systemPrintLnOut(process);
 
         } catch (IOException ex) {
             ex.printStackTrace();
+        }
+    }
+
+    private static void systemPrintLnOut(Process process) throws IOException {
+        BufferedReader in = new BufferedReader(
+                new InputStreamReader(process.getInputStream()));
+        String line = null;
+        while ((line = in.readLine()) != null) {
+            System.out.println(line);
         }
     }
 }

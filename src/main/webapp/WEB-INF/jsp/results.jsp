@@ -20,7 +20,7 @@
 <nav class="navbar navbar-inverse">
 		<div class="container">
 			<div class="navbar-header">
-				<a class="navbar-brand" href="#">Home</a>
+				<a class="navbar-brand" href="/">Home</a>
 			</div>
 			<div id="navbar" class="collapse navbar-collapse">
 				<ul class="nav navbar-nav">
@@ -43,7 +43,7 @@
 
 		<div class="starter-template">
         			<h3>Load tests report</h3>
-        			<a href="file:///test/results/HTTPReport/index.html" class="btn btn-primary" role="button">Report</a>
+        			<a href="/report" class="btn btn-default" role="button">Report</a>
         			<br><br>
         		</div>
 

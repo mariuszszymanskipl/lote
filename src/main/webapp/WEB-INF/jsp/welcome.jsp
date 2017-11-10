@@ -36,13 +36,13 @@
 		<div class="starter-template">
 			<h2>1. Image Service & Thumbor Simple Load Tests</h2>
 			<p>Scenario 1: small image, 10 users, loop 10x, posting + getting + resizing + deleting</p>
-			<p>Scenario 2: medium image, 5 users, loop 10x, posting + getting + resizing + deleting</p>
+			<p>Scenario 2: medium image, 10 users, loop 10x, posting + getting + resizing + deleting</p>
 			<a href="start1" class="btn btn-primary" role="button">Start Load Test</a>
 			<br><br>
 		</div>
 
 		<div class="starter-template">
-        			<h2>2. Image Service Simple Load Tests</h2>
+        			<h2>2. Image Service Simple Load Test</h2>
                     <p>Scenario: medium image, 10 users, loop 10x, posting + getting + resizing + deleting</p>
         			<a href="start2" class="btn btn-primary" role="button">Start Load Test</a>
         			<br><br>
