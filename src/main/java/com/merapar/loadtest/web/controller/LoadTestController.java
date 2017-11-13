@@ -14,18 +14,20 @@ public class LoadTestController {
 
     @RequestMapping("/start1")
     public String startLoadTest1() throws IOException, InterruptedException {
-        JMeterCommand.runLoadTest1();
+        String loadTestJmx = "load_test_1.jmx";
+        JMeterCommand.runLoadTest(loadTestJmx);
         return "results";
     }
 
     @RequestMapping("/start2")
     public String startLoadTest2() throws IOException, InterruptedException {
-        JMeterCommand.runLoadTest2();
+        String loadTestJmx = "load_test_2.jmx";
+        JMeterCommand.runLoadTest(loadTestJmx);
         return "results";
     }
 
     @RequestMapping(value = "/start3", method = RequestMethod.POST)
-    public String saveOrUpdateUser(@ModelAttribute("param") JMeterParameters parameters) throws IOException, InterruptedException {
+    public String startLoadTest3(@ModelAttribute("param") JMeterParameters parameters) throws IOException, InterruptedException {
         JMeterCommand.runLoadTest3(parameters);
         return "results";
     }

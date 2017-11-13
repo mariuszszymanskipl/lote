@@ -6,60 +6,30 @@ import java.io.InputStreamReader;
 
 public class JMeterCommand {
 
-    public static void runLoadTest1() throws java.io.IOException, InterruptedException {
+    public static void runLoadTest(String loadTestJmx){
 
-        System.out.println("Removing old HTTP report");
         removeOldHTMLReport();
-
-        try {
-            String[] cmdArray = new String[6];
-
-            cmdArray[0] = "jmeter";
-            cmdArray[1] = "-n";
-            cmdArray[2] = "-t";
-            cmdArray[3] = "load_test_1.jmx";
-            cmdArray[4] = "-l";
-            cmdArray[5] = "load-test-results-1.jtl";
-
-            System.out.println("Executing jmeter load test");
-
-            Process process = Runtime.getRuntime().exec(cmdArray, null);
-
-            systemPrintLnOut(process);
-
-            generateHTMLReport();
-
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
+        String loadTestCommand = generateLoadTestCommand(loadTestJmx);
+        execute(loadTestCommand);
     }
 
-    public static void runLoadTest2() throws java.io.IOException, InterruptedException {
+    private static String generateLoadTestCommand(String loadTestJmx) {
 
-        System.out.println("Removing old HTTP report");
-        removeOldHTMLReport();
+        return "jmeter -n -t "
+                + loadTestJmx
+                + " -l load-test-results.jtl";
+    }
 
+    private static void execute(String loadTestCommand) {
+
+        Process process;
         try {
-            String[] cmdArray = new String[6];
-
-            cmdArray[0] = "jmeter";
-            cmdArray[1] = "-n";
-            cmdArray[2] = "-t";
-            cmdArray[3] = "load_test_2.jmx";
-            cmdArray[4] = "-l";
-            cmdArray[5] = "load-test-results-2.jtl";
-
-            System.out.println("Executing jmeter load test");
-
-            Process process = Runtime.getRuntime().exec(cmdArray, null);
-
+            process = Runtime.getRuntime().exec(loadTestCommand, null);
             systemPrintLnOut(process);
-
-            generateHTMLReport();
-
-        } catch (IOException ex) {
-            ex.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+        generateHTMLReport();
     }
 
     public static void runLoadTest3(JMeterParameters parameters) throws java.io.IOException, InterruptedException {
@@ -114,6 +84,9 @@ public class JMeterCommand {
     }
 
     private static void removeOldHTMLReport() {
+
+        System.out.println("Removing old HTTP report");
+
         try {
             String[] cmdArray = new String[3];
 
