@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <html lang="en">
 <head>
@@ -42,26 +42,110 @@
 		</div>
 
 		<div class="starter-template">
-        			<h2>2. Image Service Simple Load Test</h2>
-                    <p>Scenario: medium image, 10 users, loop 10x, posting + getting + resizing + deleting</p>
-        			<a href="start2" class="btn btn-primary" role="button">Start Load Test</a>
-        			<br><br>
-        		</div>
+		    <h2>2. Image Service Simple Load Test</h2>
+            <p>Scenario: medium image, 10 users, loop 10x, posting + getting + resizing + deleting</p>
+        	<a href="start2" class="btn btn-primary" role="button">Start Load Test</a>
+        	<br><br>
+        </div>
 
-<div class="starter-template">
-        			<h2>3. Image Service Load Tests with parameters</h2>
-                    <p>Scenario: medium image, users: 10(default), duration: 10sec(default), posting + getting + resizing + deleting</p>
+        <div class="starter-template">
+            <h2>3. Image Service Load Tests with parameters</h2>
+            <p>Scenario: medium image, users: 10(default), duration: 10sec(default), posting + getting + resizing + deleting</p>
+            <form:form method="post" modelAttribute="param" action="start3">
+                Number of users: <form:input path="UsersNumber" type="text" />
+                Duration (in sec): <form:input path="Duration" type="text" />
+                <input class="btn btn-primary" type="submit" value="Start Load Test">
+            </form:form>
 
-        			<form:form method="post" modelAttribute="param" action="start3">
-                    		Number of users: <form:input path="UsersNumber" type="text" />
-                    		Duration (in sec): <form:input path="Duration" type="text" />
-                    		<input class="btn btn-primary" type="submit" value="Start Load Test">
 
-                    	</form:form>
-        			<br><br>
-        		</div>
+        </div>
 
-	</div>
+        <div class="starter-template">
+            <h2>Demo. Image Service Simple Load Test</h2>
+            <p>Scenario: medium image, X users, loop Xx, posting + getting + resizing + deleting</p>
+           <a href="demotest/2/execute" target="_blank" class="btn btn-primary" role="button" onclick="startRequest();">Start Load Test</a>
+            <br><br>
+
+
+             <form method="post" action="demotest/2/execute" enctype="multipart/form-data">
+
+             <div class="form-group">
+                 <label for="listOfImages">Select the image</label>
+                 <select class="form-control" name="image" id="listOfImages">
+                 <c:forEach var="image" items="${images}" >
+                           <option>${image.path}</option>
+                 </c:forEach>
+                 </select>
+               </div>
+
+
+             <div class="form-group">
+             <label for="numberOfUsers">Number of users:</label>
+             <input name="usersNumber" type="text" class="form-control" id="numberOfUsers" value="1">
+             <label for="duration">Duration (in sec):</label>
+             <input name="duration" type="text" class="form-control" id="duration" value="30">
+             </div>
+
+             <input class="btn btn-primary" formtarget="_blank" type="submit" onclick="startRequest();" value="Start Load Test">
+
+
+             <!--     <button class="btn btn-primary" target="_blank" type="submit" onclick="startRequest();">Start Load Test</button>  -->
+
+             </form>
+
+
+             <br><br>
+
+            <!-- <input type="button" value="Send request for status" onclick="startRequest();"/> -->
+            <div id="requestStatus"></div>
+            <br>
+        </div>
+
+        </div>
+
+
+
+
+	<script type="text/javascript" >
+                        /*<![CDATA[*/
+                        function startRequest() {
+                            var xhr = new XMLHttpRequest();
+                            xhr.open("POST", "/start", true);
+
+                            xhr.onreadystatechange = function() {
+                                if(xhr.readyState === 4 && xhr.status === 200) {
+                                    console.log("Start long polling.");
+                                    document.getElementById('requestStatus').innerHTML = xhr.responseText;
+                                    getStatus();
+                                }
+                            }
+                            xhr.send();
+                        }
+
+                        function getStatus() {
+                            var xhr = new XMLHttpRequest();
+
+                            xhr.open("GET", "/status", true);
+
+                            xhr.onreadystatechange = function() {
+                                if(xhr.readyState == 4 && xhr.status == 200) {
+                                    document.getElementById('requestStatus').innerHTML = xhr.responseText;
+                                    if (xhr.responseText !== "DONE") {
+                                        poll();
+                                    } else {
+                                        console.log("Stop polling");
+                                    }
+                                }
+                            }
+                            xhr.send();
+                        }
+
+                        function poll() {
+                            setTimeout(getStatus, 1000);
+                        }
+                        /*]]>*/
+                    </script>
+
 
 	<script type="text/javascript" src="webjars/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
