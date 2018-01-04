@@ -13,6 +13,7 @@ public class AsyncResponse<V> implements Future<V>{
     private boolean isDone = false;
     private long checkCompletedInterval = 100;
 
+
     public AsyncResponse() {
     }
 

@@ -1,11 +1,21 @@
 package com.merapar.loadtest;
 
+import com.merapar.loadtest.web.controller.SseController;
+import com.merapar.loadtest.web.controller.State;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.stereotype.Service;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
 public class JMeterCommand {
 
+
+
+
+    @Async
     public static void runLoadTest(String loadTestJmx){
 
         removeOldHTMLReport();
@@ -35,6 +45,7 @@ public class JMeterCommand {
     public static void runLoadTest3(JMeterParameters parameters) throws java.io.IOException, InterruptedException {
 
         System.out.println("Removing old HTTP report");
+
         removeOldHTMLReport();
 
         try {
@@ -71,9 +82,9 @@ public class JMeterCommand {
 
             cmdArray[0] = "jmeter";
             cmdArray[1] = "-g";
-            cmdArray[2] = "/test/results/report.csv";
+            cmdArray[2] = "results/report.csv";
             cmdArray[3] = "-o";
-            cmdArray[4] = "/test/results/HTTPReport";
+            cmdArray[4] = "results/HTTPReport";
 
             Process process = Runtime.getRuntime().exec(cmdArray, null);
 
@@ -110,5 +121,28 @@ public class JMeterCommand {
         while ((line = in.readLine()) != null) {
             System.out.println(line);
         }
+    }
+
+
+
+    public static Process runDemoLoadTest(String loadTestJmx){
+
+        removeOldHTMLReport();
+        String loadTestCommand = generateLoadTestCommand(loadTestJmx);
+        return executeDemo(loadTestCommand);
+    }
+
+    private static Process executeDemo(String loadTestCommand) {
+
+        Process process = null;
+        try {
+            process = Runtime.getRuntime().exec(loadTestCommand, null);
+            systemPrintLnOut(process);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        generateHTMLReport();
+        return process;
     }
 }

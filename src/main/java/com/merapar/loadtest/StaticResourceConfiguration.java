@@ -11,7 +11,7 @@ public class StaticResourceConfiguration extends WebMvcConfigurerAdapter {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/**","/META-INF/resources", "/resources", "/static", "/public")
-                .addResourceLocations("file:/test/results/HTTPReport");
+                .addResourceLocations("file:results/HTTPReport");
     }
 
     @Override
