@@ -1,4 +1,4 @@
-package com.merapar.loadtest;
+package com.merapar.loadtest.jmeter;
 
 import com.merapar.loadtest.utils.AsyncResponse;
 import com.merapar.loadtest.web.controller.State;
@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.concurrent.Future;
 
 @Service
-public class JMeterServiceBean implements JMeterService{
+public class JMeterServiceBean implements JMeterService {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 

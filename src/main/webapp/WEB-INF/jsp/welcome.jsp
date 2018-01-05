@@ -52,46 +52,31 @@
             <h2>3. Image Service Load Tests with parameters</h2>
             <p>Scenario: medium image, users: 10(default), duration: 10sec(default), posting + getting + resizing + deleting</p>
             <form:form method="post" modelAttribute="param" action="start3">
-                Number of users: <form:input path="UsersNumber" type="text" />
-                Duration (in sec): <form:input path="Duration" type="text" />
-                <input class="btn btn-primary" type="submit" value="Start Load Test">
+                Number of users: <form:input path="numberOfUsers" type="text" />
+                Duration (in sec): <form:input path="duration" type="text" />
+                <input class="btn btn-primary" type="submit" formtarget="_blank" value="Start Load Test">
             </form:form>
 
 
         </div>
 
         <div class="starter-template">
-            <h2>Demo. Image Service Simple Load Test</h2>
+            <h2>4. Demo. Image Service Simple Load Test</h2>
             <p>Scenario: medium image, X users, loop Xx, posting + getting + resizing + deleting</p>
            <a href="demotest/2/execute" target="_blank" class="btn btn-primary" role="button" onclick="startRequest();">Start Load Test</a>
             <br><br>
 
 
-             <form method="post" action="demotest/2/execute" enctype="multipart/form-data">
-
-             <div class="form-group">
-                 <label for="listOfImages">Select the image</label>
-                 <select class="form-control" name="image" id="listOfImages">
-                 <c:forEach var="image" items="${images}" >
-                           <option>${image.path}</option>
-                 </c:forEach>
-                 </select>
-               </div>
-
-
-             <div class="form-group">
-             <label for="numberOfUsers">Number of users:</label>
-             <input name="usersNumber" type="text" class="form-control" id="numberOfUsers" value="1">
-             <label for="duration">Duration (in sec):</label>
-             <input name="duration" type="text" class="form-control" id="duration" value="30">
-             </div>
+             <form:form method="post" modelAttribute="param" action="demotest/2/execute" enctype="multipart/form-data">
+             Number of users: <form:input path="numberOfUsers" type="text" />
+             Duration (in sec): <form:input path="duration" type="text" />
+             Image: <form:select path="test">
+                        <form:options items="${images}" itemValue="name" itemLabel="name" />
+                    </form:select>
 
              <input class="btn btn-primary" formtarget="_blank" type="submit" onclick="startRequest();" value="Start Load Test">
 
-
-             <!--     <button class="btn btn-primary" target="_blank" type="submit" onclick="startRequest();">Start Load Test</button>  -->
-
-             </form>
+             </form:form>
 
 
              <br><br>

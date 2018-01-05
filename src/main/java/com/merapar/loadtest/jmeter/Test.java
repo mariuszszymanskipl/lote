@@ -1,4 +1,4 @@
-package com.merapar.loadtest;
+package com.merapar.loadtest.jmeter;
 
 public class Test {
 

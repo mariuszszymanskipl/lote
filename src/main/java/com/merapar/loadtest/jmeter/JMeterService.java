@@ -1,4 +1,4 @@
-package com.merapar.loadtest;
+package com.merapar.loadtest.jmeter;
 
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.async.DeferredResult;

@@ -1,19 +1,12 @@
-package com.merapar.loadtest;
+package com.merapar.loadtest.jmeter;
 
-import com.merapar.loadtest.web.controller.SseController;
-import com.merapar.loadtest.web.controller.State;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
-import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
 public class JMeterCommand {
-
-
-
 
     @Async
     public static void runLoadTest(String loadTestJmx){
@@ -55,7 +48,7 @@ public class JMeterCommand {
             cmdArray[1] = "-n";
             cmdArray[2] = "-t";
             cmdArray[3] = "load_test_3.jmx";
-            cmdArray[4] = "-Jusers=" + parameters.getUsersNumber();
+            cmdArray[4] = "-Jusers=" + parameters.getNumberOfUsers();
             cmdArray[5] = "-Jduration=" + parameters.getDuration();
             cmdArray[6] = "-l";
             cmdArray[7] = "load-test-results-3.jtl";

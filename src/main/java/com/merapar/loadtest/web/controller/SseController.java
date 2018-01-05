@@ -1,6 +1,6 @@
 package com.merapar.loadtest.web.controller;
 
-import com.merapar.loadtest.JMeterServiceBean;
+import com.merapar.loadtest.jmeter.JMeterServiceBean;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
