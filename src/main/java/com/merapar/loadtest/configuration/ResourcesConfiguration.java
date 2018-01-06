@@ -6,10 +6,13 @@ import org.springframework.context.annotation.Configuration;
 import java.io.File;
 
 @Configuration
-public class ImageConfiguration {
+public class ResourcesConfiguration {
 
     @Value("${imagesFolder:images}")
     private String imagesFolder;
+
+    @Value("${jMeterTestsFolder:jMeterTests}")
+    private String jMeterTestsFolder;
 
     @Value("${maxWidth}")
     private Integer maxWidth;
@@ -20,6 +23,10 @@ public class ImageConfiguration {
 
     public String getImagesFolder() {
         return imagesFolder;
+    }
+
+    public String getjMeterTestsFolder() {
+        return jMeterTestsFolder;
     }
 
     public Integer getMaxWidth() {

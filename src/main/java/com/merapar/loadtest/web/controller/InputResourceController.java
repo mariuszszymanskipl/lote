@@ -1,34 +1,30 @@
 package com.merapar.loadtest.web.controller;
 
-import com.merapar.loadtest.configuration.ImageConfiguration;
+import com.merapar.loadtest.configuration.ResourcesConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
-import sun.misc.IOUtils;
 
-import javax.xml.ws.Response;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
 
 @Controller
-public class ImageController {
+public class InputResourceController {
 
     private static final String IMAGE_PNG_CONTENT_TYPE = "image/png";
     private static final String IMAGE_JPEG_CONTENT_TYPE = "image/jpeg";
 
     @Autowired
-    private ImageConfiguration imageConfiguration;
+    private ResourcesConfiguration resourcesConfiguration;
 
-    private Logger logger = LoggerFactory.getLogger(ImageController.class);
+    private Logger logger = LoggerFactory.getLogger(InputResourceController.class);
 
     @RequestMapping("/image")
     public String welcome() {
@@ -36,9 +32,8 @@ public class ImageController {
     }
 
     @RequestMapping(value = "/uploadSingleImage", method = RequestMethod.POST)
-    public @ResponseBody
-    String uploadFileHandler(@RequestParam("name") String name,
-                             @RequestParam("file") MultipartFile file) {
+    public @ResponseBody String uploadFileHandler(@RequestParam("name") String name,
+                                                  @RequestParam("file") MultipartFile file) {
 
         String item = file.getContentType();
 
@@ -47,10 +42,7 @@ public class ImageController {
                 byte[] bytes = file.getBytes();
 
                 // Creating the directory to store file
-//                String imageFolder = "load-test";
-//                String rootPath = System.getProperty(imageConfiguration.getImagesFolder());
-//                File dir = new File(imageConfiguration.getImagesFolder() + File.separator + "tmpFiles");
-                File dir = new File(imageConfiguration.getImagesFolder());
+                File dir = new File(resourcesConfiguration.getImagesFolder());
                 if (!dir.exists())
                     dir.mkdirs();
 
@@ -70,8 +62,7 @@ public class ImageController {
                 logger.info("Server File Location="
                         + serverFile.getAbsolutePath());
 
-                return "You successfully uploaded new file: " + image.getName() +
-                        "\n\n Image path: " + image.getPath();
+                return "You successfully uploaded new file: " + image.getName() + "<br> Image path: " + image.getPath();
             } catch (Exception e) {
                 return "You failed to upload " + name + " => " + e.getMessage();
             }
@@ -79,7 +70,52 @@ public class ImageController {
             return "You failed to upload " + name
                     + " because the file was empty.";
         }
+    }
 
+    @RequestMapping("/jMeterTest")
+    public String jMeterTest() {
+        return "jMeterTest-upload";
+    }
+
+    @RequestMapping(value = "/uploadJMeterTest", method = RequestMethod.POST)
+    public @ResponseBody String uploadJMeterTestHandler(@RequestParam("name") String testName,
+                                                  @RequestParam("file") MultipartFile file) {
+
+        String item = file.getContentType();
+
+        if (!file.isEmpty()) {
+            try {
+                byte[] bytes = file.getBytes();
+
+                // Creating the directory to store file
+                File dir = new File(resourcesConfiguration.getjMeterTestsFolder());
+                if (!dir.exists())
+                    dir.mkdirs();
+
+                // Create the file on server
+                File serverFile = new File(dir.getAbsolutePath()
+                        + File.separator + testName);
+                BufferedOutputStream stream = new BufferedOutputStream(
+                        new FileOutputStream(serverFile));
+                stream.write(bytes);
+                stream.close();
+
+                // Create image object
+//                Image image = new Image();
+//                image.setName(name);
+//                image.setPath(serverFile.getAbsolutePath());
+
+                logger.info("Server File Location="
+                        + serverFile.getAbsolutePath());
+
+                return "You successfully uploaded new file: " + testName + "<br> Image path: " + serverFile.getAbsolutePath();
+            } catch (Exception e) {
+                return "You failed to upload " + testName + " => " + e.getMessage();
+            }
+        } else {
+            return "You failed to upload " + testName
+                    + " because the file was empty.";
+        }
     }
 
 
