@@ -2,16 +2,25 @@ package com.merapar.loadtest.jmeter;
 
 public class JMeterParameters {
 
-    private String test;
+    private String jMeterTest;
+    private String imageName;
     private String numberOfUsers;
     private String duration;
 
-    public String getTest() {
-        return test;
+    public String getjMeterTest() {
+        return jMeterTest;
     }
 
-    public void setTest(String test) {
-        this.test = test;
+    public void setjMeterTest(String jMeterTest) {
+        this.jMeterTest = jMeterTest;
+    }
+
+    public String getImageName() {
+        return imageName;
+    }
+
+    public void setImageName(String imageName) {
+        this.imageName = imageName;
     }
 
     public String getNumberOfUsers() {

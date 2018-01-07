@@ -54,13 +54,13 @@ public class LoadTestController {
 //    @ResponseBody
     public String executeTest(@PathVariable("id") Long id,
                               @RequestParam(value = "wait", defaultValue = "false") boolean waitForAsyncResult,
-                              @ModelAttribute("param") JMeterParameters parameters,
-                              @ModelAttribute("image") String image) {
+                              @ModelAttribute("param") JMeterParameters parameters) {
 
         logger.info("> executeTest id:{}", id);
         logger.info("Number of users: {}", parameters.getNumberOfUsers());
         logger.info("Duration: {}", parameters.getDuration());
-        logger.info("Image: {}", parameters.getTest());
+        logger.info("Image: {}", parameters.getImageName());
+        logger.info("JMeter test: {}", parameters.getjMeterTest());
 //        logger.info("Image: {}", image);
 
         String loadTestJmx = "load_test_" + id + ".jmx";

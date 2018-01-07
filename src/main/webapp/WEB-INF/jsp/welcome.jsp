@@ -33,7 +33,7 @@
 
 	<div class="container">
 
-		<div class="starter-template">
+		<div>
 			<h2>1. Image Service & Thumbor Simple Load Tests</h2>
 			<p>Scenario 1: small image, 10 users, loop 10x, posting + getting + resizing + deleting</p>
 			<p>Scenario 2: medium image, 10 users, loop 10x, posting + getting + resizing + deleting</p>
@@ -70,8 +70,11 @@
              <form:form method="post" modelAttribute="param" action="demotest/2/execute" enctype="multipart/form-data">
              Number of users: <form:input path="numberOfUsers" type="text" />
              Duration (in sec): <form:input path="duration" type="text" />
-             Image: <form:select path="test">
+             Image: <form:select path="imageName">
                         <form:options items="${images}" itemValue="name" itemLabel="name" />
+                    </form:select>
+             Test: <form:select path="jMeterTest">
+                        <form:options items="${jMeterTests}" />
                     </form:select>
 
              <input class="btn btn-primary" formtarget="_blank" type="submit" onclick="startRequest();" value="Start Load Test">

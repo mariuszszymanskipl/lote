@@ -105,8 +105,7 @@ public class InputResourceController {
 //                image.setName(name);
 //                image.setPath(serverFile.getAbsolutePath());
 
-                logger.info("Server File Location="
-                        + serverFile.getAbsolutePath());
+                logger.info("Server File Location=" + serverFile.getAbsolutePath());
 
                 return "You successfully uploaded new file: " + testName + "<br> Image path: " + serverFile.getAbsolutePath();
             } catch (Exception e) {

@@ -21,6 +21,9 @@ public class WelcomeController {
     @Value("${imagesFolder:images}")
     private String imagesFolder;
 
+    @Value("${jMeterTestsFolder:jMeterTests}")
+    private String jMeterTestsFolder;
+
     @RequestMapping("/")
     public String welcome(Model model) {
 
@@ -28,16 +31,28 @@ public class WelcomeController {
 
         createImagesFolder();
         List<Image> images = getImages();
+        List<String> tests = getJMeterTests();
         model.addAttribute("param", param);
         model.addAttribute("images", images);
+        model.addAttribute("jMeterTests", tests);
 
         return "welcome";
+    }
+
+    private List<String> getJMeterTests() {
+        List<String> tests = new ArrayList<>();
+        try (Stream<Path> paths = Files.walk(Paths.get("jMeterTests").getFileName())) {
+            paths.filter(Files::isRegularFile).forEach(path -> tests.add(getFileNameWithExtensionFromPath(path.toString())));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return tests;
     }
 
     private List<Image> getImages() {
         List<Image> images = new ArrayList<>();
         try (Stream<Path> paths = Files.walk(Paths.get("images").getFileName())) {
-            paths.filter(Files::isRegularFile).forEach(path -> images.add(new Image(getImageNameWithExtensionFromPath(path.toString()))));
+            paths.filter(Files::isRegularFile).forEach(path -> images.add(new Image(getFileNameWithExtensionFromPath(path.toString()))));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -50,7 +65,7 @@ public class WelcomeController {
             dir.mkdirs();
     }
 
-    private String getImageNameWithExtensionFromPath(String path) {
+    private String getFileNameWithExtensionFromPath(String path) {
         return path.contains(File.separator) ? path.substring(path.lastIndexOf(File.separator) + 1) : path;
     }
 
