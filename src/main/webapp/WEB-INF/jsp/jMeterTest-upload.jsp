@@ -27,17 +27,14 @@
 			</div>
 			<div id="navbar" class="collapse navbar-collapse">
 				<ul class="nav navbar-nav">
-				<!--
-					<li class="active"><a href="#">Results</a></li>
-					<li><a href="#about">Logs</a></li>
-				-->
+					<li><a href="image">Images</a></li>
+					<li><a href="jMeterTest">Tests</a></li>
 				</ul>
 			</div>
 		</div>
-	</nav>
+</nav>
 
-	<div class="container">
-
+<div class="container">
 
 <form method="POST" action="uploadJMeterTest" enctype="multipart/form-data">
     <label class="btn btn-primary" for="JMeterTestFile">

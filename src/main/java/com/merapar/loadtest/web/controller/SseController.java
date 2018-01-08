@@ -19,7 +19,7 @@ public class SseController {
 
     private final List<SseEmitter> sseEmitter = JMeterServiceBean.sseEmitter;
 
-    private State state = new State("state 0");
+    private State state = new State("Starting JMeter load test...");
 
     @RequestMapping(path = "/demo", method = RequestMethod.GET)
     public String sseExamplePage(Map<String, Object> model) {

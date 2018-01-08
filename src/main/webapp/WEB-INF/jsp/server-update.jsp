@@ -33,6 +33,6 @@
     </head>
     <body onload="connect();">
         <!-- Load the initial state from the application model. -->
-        App status: <span id="state"><c:out value="${state.text}"/></span>
+        <span id="state"><c:out value="${state.text}"/></span>
     </body>
 </html>

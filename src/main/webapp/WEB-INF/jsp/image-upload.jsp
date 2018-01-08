@@ -15,9 +15,6 @@
 
 <script type='text/javascript'>
 
-
-
-
 function showFileSize() {
     var input, file;
 
@@ -65,6 +62,21 @@ function readURL(input) {
 
 </head>
 <body>
+
+<nav class="navbar navbar-inverse">
+		<div class="container">
+			<div class="navbar-header">
+				<a class="navbar-brand" href="/">Home</a>
+			</div>
+			<div id="navbar" class="collapse navbar-collapse">
+				<ul class="nav navbar-nav">
+					<li><a href="image">Images</a></li>
+					<li><a href="jMeterTest">Tests</a></li>
+				</ul>
+			</div>
+		</div>
+</nav>
+
 	<form method="POST" action="uploadSingleImage" enctype="multipart/form-data">
 
 		File to upload: <input id='image-file' type="file" name="file">
@@ -111,6 +123,15 @@ function readURL(input) {
 	<div id="file-content"></div>
 
 	<img id="image" src="#" width="300" height="auto" alt="your image" />
+
+
+	<label class="control-label">Select File</label>
+    <input id="input-b5" name="input-b5[]" type="file" multiple>
+    <script>
+    $(document).on('ready', function() {
+        $("#input-b5").fileinput({showCaption: false});
+    });
+    </script>
 
 
 </body>

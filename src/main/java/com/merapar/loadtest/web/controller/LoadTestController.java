@@ -46,43 +46,24 @@ public class LoadTestController {
         return "results";
     }
 
-//    @RequestMapping(value = "/demotest/{id}/execute", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-//    public ResponseEntity<Test> executeTest(@PathVariable("id") Long id,
-//                                            @RequestParam(value = "wait", defaultValue = "false") boolean waitForAsyncResult) {
+    @RequestMapping(value = "/demotest/execute", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    public String executeTest(@ModelAttribute("param") JMeterParameters parameters) {
 
-    @RequestMapping(value = "/demotest/{id}/execute", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-//    @ResponseBody
-    public String executeTest(@PathVariable("id") Long id,
-                              @RequestParam(value = "wait", defaultValue = "false") boolean waitForAsyncResult,
-                              @ModelAttribute("param") JMeterParameters parameters) {
-
-        logger.info("> executeTest id:{}", id);
         logger.info("Number of users: {}", parameters.getNumberOfUsers());
         logger.info("Duration: {}", parameters.getDuration());
         logger.info("Image: {}", parameters.getImageName());
         logger.info("JMeter test: {}", parameters.getjMeterTest());
-//        logger.info("Image: {}", image);
 
-        String loadTestJmx = "load_test_" + id + ".jmx";
-        Test test = new Test(loadTestJmx);
+        Test test = new Test(parameters.getjMeterTest());
 
         try {
-            if (waitForAsyncResult) {
-                Future<Boolean> asyncResponse = jMeterService.executeAsyncWithResult(test);
-                boolean testExecute = asyncResponse.get();
-                logger.info("- test executed? {}", testExecute);
-            } else {
-                jMeterService.executeAsync(test);
-            }
+            jMeterService.executeAsync(test);
         } catch (Exception e) {
             logger.error("A problem occurred executing test.", e);
             return "error";
         }
-
-        logger.info("< execute Test id:{}", id);
         return "redirect:/demo";
     }
-
 
 
     @RequestMapping(value = "/start", method = RequestMethod.POST)

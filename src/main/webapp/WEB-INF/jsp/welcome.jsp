@@ -22,14 +22,12 @@
 			</div>
 			<div id="navbar" class="collapse navbar-collapse">
 				<ul class="nav navbar-nav">
-				<!--
-					<li class="active"><a href="#">Results</a></li>
-					<li><a href="#about">Logs</a></li>
-				-->
+					<li><a href="image">Images</a></li>
+					<li><a href="jMeterTest">Tests</a></li>
 				</ul>
 			</div>
 		</div>
-	</nav>
+</nav>
 
 	<div class="container">
 
@@ -63,11 +61,8 @@
         <div class="starter-template">
             <h2>4. Demo. Image Service Simple Load Test</h2>
             <p>Scenario: medium image, X users, loop Xx, posting + getting + resizing + deleting</p>
-           <a href="demotest/2/execute" target="_blank" class="btn btn-primary" role="button" onclick="startRequest();">Start Load Test</a>
-            <br><br>
 
-
-             <form:form method="post" modelAttribute="param" action="demotest/2/execute" enctype="multipart/form-data">
+             <form:form method="post" modelAttribute="param" action="demotest/execute" enctype="multipart/form-data">
              Number of users: <form:input path="numberOfUsers" type="text" />
              Duration (in sec): <form:input path="duration" type="text" />
              Image: <form:select path="imageName">
@@ -80,7 +75,6 @@
              <input class="btn btn-primary" formtarget="_blank" type="submit" onclick="startRequest();" value="Start Load Test">
 
              </form:form>
-
 
              <br><br>
 

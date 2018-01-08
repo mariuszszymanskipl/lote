@@ -1,10 +1,10 @@
 package com.merapar.loadtest.jmeter;
 
-import com.merapar.loadtest.utils.AsyncResponse;
+import com.merapar.loadtest.configuration.ResourcesConfiguration;
 import com.merapar.loadtest.web.controller.State;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.core.io.ClassPathResource;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -22,11 +22,14 @@ import java.util.concurrent.Future;
 @Service
 public class JMeterServiceBean implements JMeterService {
 
+    @Autowired
+    private ResourcesConfiguration resourcesConfiguration;
+
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     public static final List<SseEmitter> sseEmitter = new LinkedList<>();
 
-    private State state = new State("state 0");
+    private State state = new State("Starting JMeter load test...");
 
     private enum LongRequestStatus {
         INITIALIZING, PHASE1, DONE
@@ -52,27 +55,21 @@ public class JMeterServiceBean implements JMeterService {
         return waitingResponse;
     }
 
-
-
     @Async
     @Override
     public boolean execute(Test test) {
 
         long startTime = System.currentTimeMillis();
-        String newState = "Starting jmeter test load_test_2.jmx";
-        state = new State(newState);
-        sendUpdate(state);
-        logger.info(newState);
 
-        Boolean success;
+        generateNewState("Load test file: " + test.getName());
+        generateNewState("Removing old HTTP report");
 
-        File testFile = null;
-        try {
-            testFile = new ClassPathResource("load_test_2.jmx").getFile();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        String loadTestJmx = testFile != null ? testFile.getPath() : null;
+        removeOldHTMLReport();
+
+        File testsDir = new File(resourcesConfiguration.getjMeterTestsFolder());
+        File testFile = new File(testsDir.getAbsolutePath() + File.separator + test.getName());
+
+        String loadTestJmx = testFile.getPath();
 
         String loadTestCommand = "jmeter -n -t " + loadTestJmx + " -l load-test-results.csv";
 
@@ -88,9 +85,7 @@ public class JMeterServiceBean implements JMeterService {
             String line;
             try {
                 while ((line = in.readLine()) != null) {
-                    newState = state.getText() + "<p>" + line + "</p>";
-                    state = new State(newState);
-                    sendUpdate(state);
+                    generateNewState(line);
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -103,19 +98,13 @@ public class JMeterServiceBean implements JMeterService {
         long endTime = System.currentTimeMillis();
         long durationTime = endTime - startTime;
 
-        logger.info("Processing time was {} seconds.", durationTime / 1000);
-        newState = state.getText() + "<p>" +" Processing time was " + durationTime / 1000 + " seconds." + "</p>";
-        state = new State(newState);
-        sendUpdate(state);
+        generateNewState(" Processing time was " + durationTime / 1000 + " seconds");
+        generateNewState("End of the test");
 
-        success = Boolean.TRUE;
-
-        logger.info("< executed");
-
-
-
-        return success;
+        return Boolean.TRUE;
     }
+
+
 
     @Async
     @Override
@@ -137,23 +126,15 @@ public class JMeterServiceBean implements JMeterService {
         publishStatus(currentStatus);
     }
 
-    @Async
     @Override
     public Future<Boolean> executeAsyncWithResult(Test test) {
-        logger.info("> executeAsyncWithResult");
+        return null;
+    }
 
-        AsyncResponse<Boolean> response = new AsyncResponse<>();
-
-        try {
-            Boolean success = execute(test);
-            response.complete(success);
-        } catch (Exception e) {
-            logger.warn("Exception caught executing asynchronous test", e);
-            response.completeExceptionally(e);
-        }
-
-        logger.info("< executedAsyncWithResult");
-        return response;
+    private void generateNewState(String message) {
+        state = new State(state.getText() + "<p>" + message + "</p>");
+        sendUpdate(state);
+        logger.info(message);
     }
 
     private void sendUpdate(State state) {
@@ -166,6 +147,35 @@ public class JMeterServiceBean implements JMeterService {
                     sseEmitter.remove(emitter);
                 }
             });
+        }
+    }
+
+    private static void removeOldHTMLReport() {
+
+        System.out.println("Removing old HTTP report");
+
+        try {
+            String[] cmdArray = new String[3];
+
+            cmdArray[0] = "rm";
+            cmdArray[1] = "-r";
+            cmdArray[2] = "results";
+
+            Process process = Runtime.getRuntime().exec(cmdArray, null);
+
+            systemPrintLnOut(process);
+
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private static void systemPrintLnOut(Process process) throws IOException {
+        BufferedReader in = new BufferedReader(
+                new InputStreamReader(process.getInputStream()));
+        String line = null;
+        while ((line = in.readLine()) != null) {
+            System.out.println(line);
         }
     }
 }

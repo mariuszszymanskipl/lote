@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -32,7 +33,8 @@ public class InputResourceController {
     }
 
     @RequestMapping(value = "/uploadSingleImage", method = RequestMethod.POST)
-    public @ResponseBody String uploadFileHandler(@RequestParam("name") String name,
+    public String uploadFileHandler(Model model,
+                                                  @RequestParam("name") String name,
                                                   @RequestParam("file") MultipartFile file) {
 
         String item = file.getContentType();
@@ -59,16 +61,21 @@ public class InputResourceController {
                 image.setName(name);
                 image.setPath(serverFile.getAbsolutePath());
 
-                logger.info("Server File Location="
-                        + serverFile.getAbsolutePath());
+                logger.info("Server File Location=" + serverFile.getAbsolutePath());
 
-                return "You successfully uploaded new file: " + image.getName() + "<br> Image path: " + image.getPath();
+                String message = "You successfully uploaded new file: " + image.getName();
+                model.addAttribute("message", message);
+                return "upload-confirm";
+
             } catch (Exception e) {
-                return "You failed to upload " + name + " => " + e.getMessage();
+                String message = "You failed to upload " + name + " => " + e.getMessage();
+                model.addAttribute("message", message);
+                return "upload-confirm";
             }
         } else {
-            return "You failed to upload " + name
-                    + " because the file was empty.";
+            String message = "You failed to upload " + name + " because the file was empty.";
+            model.addAttribute("message", message);
+            return "upload-confirm";
         }
     }
 
@@ -78,8 +85,9 @@ public class InputResourceController {
     }
 
     @RequestMapping(value = "/uploadJMeterTest", method = RequestMethod.POST)
-    public @ResponseBody String uploadJMeterTestHandler(@RequestParam("name") String testName,
-                                                  @RequestParam("file") MultipartFile file) {
+    public String uploadJMeterTestHandler(Model model,
+                                          @RequestParam("name") String testName,
+                                          @RequestParam("file") MultipartFile file) {
 
         String item = file.getContentType();
 
@@ -97,25 +105,28 @@ public class InputResourceController {
                         + File.separator + testName);
                 BufferedOutputStream stream = new BufferedOutputStream(
                         new FileOutputStream(serverFile));
+
                 stream.write(bytes);
                 stream.close();
 
-                // Create image object
-//                Image image = new Image();
-//                image.setName(name);
-//                image.setPath(serverFile.getAbsolutePath());
-
                 logger.info("Server File Location=" + serverFile.getAbsolutePath());
 
-                return "You successfully uploaded new file: " + testName + "<br> Image path: " + serverFile.getAbsolutePath();
+                String message = "You successfully uploaded new file: " + testName;
+                model.addAttribute("message", message);
+                return "upload-confirm";
+
             } catch (Exception e) {
-                return "You failed to upload " + testName + " => " + e.getMessage();
+                String message = "You failed to upload " + testName + " => " + e.getMessage();
+                model.addAttribute("message", message);
+                return "upload-confirm";
             }
         } else {
-            return "You failed to upload " + testName
-                    + " because the file was empty.";
+            String message = "You failed to upload " + testName + " because the file was empty.";
+            model.addAttribute("message", message);
+            return "upload-confirm";
         }
     }
+
 
 
 
