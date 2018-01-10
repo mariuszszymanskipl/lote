@@ -25,7 +25,7 @@ public class ResourcesConfiguration {
         return imagesFolder;
     }
 
-    public String getjMeterTestsFolder() {
+    public String getJMeterTestsFolder() {
         return jMeterTestsFolder;
     }
 

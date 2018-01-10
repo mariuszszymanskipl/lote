@@ -3,6 +3,7 @@ package com.merapar.loadtest.web.controller;
 import com.merapar.loadtest.jmeter.JMeterServiceBean;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
@@ -21,8 +22,8 @@ public class SseController {
 
     private State state = new State("Starting JMeter load test...");
 
-    @RequestMapping(path = "/demo", method = RequestMethod.GET)
-    public String sseExamplePage(Map<String, Object> model) {
+    @RequestMapping(path = "/JMeterTest/{id}", method = RequestMethod.GET)
+    public String sseExamplePage(@PathVariable("id") Long id, Map<String, Object> model) {
         model.put("state", state);
         return "server-update";
     }

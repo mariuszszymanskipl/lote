@@ -3,7 +3,6 @@ package com.merapar.loadtest.web.controller;
 import com.merapar.loadtest.jmeter.JMeterCommand;
 import com.merapar.loadtest.jmeter.JMeterParameters;
 import com.merapar.loadtest.jmeter.JMeterService;
-import com.merapar.loadtest.jmeter.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.async.DeferredResult;
 
 import java.io.IOException;
-import java.util.concurrent.Future;
 
 @Controller
 public class LoadTestController {
@@ -52,17 +50,15 @@ public class LoadTestController {
         logger.info("Number of users: {}", parameters.getNumberOfUsers());
         logger.info("Duration: {}", parameters.getDuration());
         logger.info("Image: {}", parameters.getImageName());
-        logger.info("JMeter test: {}", parameters.getjMeterTest());
-
-        Test test = new Test(parameters.getjMeterTest());
+        logger.info("JMeter jMeterTest: {}", parameters.getjMeterTest());
 
         try {
-            jMeterService.executeAsync(test);
+            jMeterService.executeAsync(parameters);
         } catch (Exception e) {
-            logger.error("A problem occurred executing test.", e);
+            logger.error("A problem occurred executing jMeterTest.", e);
             return "error";
         }
-        return "redirect:/demo";
+        return "redirect:/JMeterTest/123";
     }
 
 

@@ -57,21 +57,31 @@ public class JMeterServiceBean implements JMeterService {
 
     @Async
     @Override
-    public boolean execute(Test test) {
+    public boolean execute(JMeterParameters jMeterParameters) {
 
         long startTime = System.currentTimeMillis();
 
-        generateNewState("Load test file: " + test.getName());
+        generateNewState("Load jMeterTest file: " + jMeterParameters.getjMeterTest());
         generateNewState("Removing old HTTP report");
 
         removeOldHTMLReport();
 
-        File testsDir = new File(resourcesConfiguration.getjMeterTestsFolder());
-        File testFile = new File(testsDir.getAbsolutePath() + File.separator + test.getName());
+        File testsDir = new File(resourcesConfiguration.getJMeterTestsFolder());
+        File testFile = new File(testsDir.getAbsolutePath() + File.separator + jMeterParameters.getjMeterTest());
 
         String loadTestJmx = testFile.getPath();
 
-        String loadTestCommand = "jmeter -n -t " + loadTestJmx + " -l load-test-results.csv";
+        String[] cmdArray = new String[9];
+
+        cmdArray[0] = "jmeter";
+        cmdArray[1] = "-n";
+        cmdArray[2] = "-t";
+        cmdArray[3] = loadTestJmx;
+        cmdArray[4] = "-Jusers=" + jMeterParameters.getNumberOfUsers();
+        cmdArray[5] = "-Jduration=" + jMeterParameters.getDuration();
+        cmdArray[6] = "-Jimage=" + jMeterParameters.getImageName();
+        cmdArray[7] = "-l";
+        cmdArray[8] = "load-jMeterTest-results.csv";
 
         Process process;
         try {
@@ -79,7 +89,7 @@ public class JMeterServiceBean implements JMeterService {
 //            currentStatus = LongRequestStatus.PHASE1;
 //            publishStatus(currentStatus);
 
-            process = Runtime.getRuntime().exec(loadTestCommand, null);
+            process = Runtime.getRuntime().exec(cmdArray, null);
             BufferedReader in = new BufferedReader(
                     new InputStreamReader(process.getInputStream()));
             String line;
@@ -99,7 +109,7 @@ public class JMeterServiceBean implements JMeterService {
         long durationTime = endTime - startTime;
 
         generateNewState(" Processing time was " + durationTime / 1000 + " seconds");
-        generateNewState("End of the test");
+        generateNewState("End of the jMeterTest");
 
         return Boolean.TRUE;
     }
@@ -108,7 +118,7 @@ public class JMeterServiceBean implements JMeterService {
 
     @Async
     @Override
-    public void executeAsync(Test test) {
+    public void executeAsync(JMeterParameters jMeterParameters) {
         currentStatus = LongRequestStatus.INITIALIZING;
         publishStatus(currentStatus);
 
@@ -116,9 +126,9 @@ public class JMeterServiceBean implements JMeterService {
         try {
             currentStatus = LongRequestStatus.PHASE1;
             publishStatus(currentStatus);
-            execute(test);
+            execute(jMeterParameters);
         } catch (Exception e) {
-            logger.warn("Exception caught executing asynchronous test.", e);
+            logger.warn("Exception caught executing asynchronous jMeterTest.", e);
         }
         logger.info("< executedAsync");
 
@@ -127,7 +137,7 @@ public class JMeterServiceBean implements JMeterService {
     }
 
     @Override
-    public Future<Boolean> executeAsyncWithResult(Test test) {
+    public Future<Boolean> executeAsyncWithResult(JMeterParameters parameters) {
         return null;
     }
 

@@ -8,11 +8,11 @@ import java.util.concurrent.Future;
 @Service
 public interface JMeterService {
 
-    boolean execute(Test test);
+    boolean execute(JMeterParameters parameters);
 
-    void executeAsync(Test test);
+    void executeAsync(JMeterParameters parameters);
 
-    Future<Boolean> executeAsyncWithResult(Test test);
+    Future<Boolean> executeAsyncWithResult(JMeterParameters parameters);
 
     DeferredResult<String> getStatus();
 }
