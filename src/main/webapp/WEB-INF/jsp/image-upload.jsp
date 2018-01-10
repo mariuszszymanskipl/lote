@@ -15,47 +15,26 @@
 
 <script type='text/javascript'>
 
-function showFileSize() {
-    var input, file;
-
-    if (!window.FileReader) {
-        alert("The file API isn't supported on this browser yet.");
-        return;
-    }
-
-    input = document.getElementById('image-file');
-    if (!input) {
-        bodyAppend("p", "Um, couldn't find the fileinput element.");
-    }
-    else if (!input.files) {
-        bodyAppend("p", "This browser doesn't seem to support the `files` property of file inputs.");
-    }
-    else if (!input.files[0]) {
-        bodyAppend("p", "Please select a file before clicking 'Load'");
-    }
-    else {
-        file = input.files[0]; console.log(file);
-        bodyAppend("p", "File " + file.name + " is " + file.size + " bytes in size");
-    }
-}
-function bodyAppend(tagName, innerHTML) {
-    var elm;
-
-    elm = document.createElement(tagName);
-    elm.innerHTML = innerHTML;
-    document.body.appendChild(elm);
+function getMeta(url){
+    var img = new Image();
+    img.addEventListener("load", function(){
+    $("#file-dimensions").replaceWith('<div id="file-dimensions"><p>File original dimensions: ' + this.naturalWidth + ' x ' + this.naturalHeight + '</p></div>');
+    });
+    img.src = url;
 }
 
 function readURL(input) {
     if (input.files && input.files[0]) {
         var reader = new FileReader();
-
         reader.onload = function (e) {
-            $('#image').attr('src', e.target.result);
+        var dataUri = e.target.result;
+            $('#image').replaceWith('<img id="image" src=' + dataUri + ' width="300" height="auto"/>');
+            getMeta(dataUri);
         }
         reader.readAsDataURL(input.files[0]);
     }
 }
+
 </script>
 
 
@@ -77,62 +56,60 @@ function readURL(input) {
 		</div>
 </nav>
 
-	<form method="POST" action="uploadSingleImage" enctype="multipart/form-data">
+<div class="container">
 
-		File to upload: <input id='image-file' type="file" name="file">
 
+<form method="POST" action="uploadSingleImage" enctype="multipart/form-data">
+    <label class="btn btn-primary" for="ImageFile">
+        <input id="ImageFile" type="file" name="file" style="display:none">
+        Add new image
+    </label>
+    <span id="image-name"></span>
+    <span id="UploadButton"></span>
+</form>
+
+<br><br>
+<span id="image"></span>
+<br><br>
+<span id="file-content"></span>
+<br>
+<span id="file-dimensions"></span>
+
+		<script type="text/javascript">
+                    $('#ImageFile').bind('change', function() {
+
+                    var fileName = this.files[0].name;
+                    $("#image-name").replaceWith('<input id="image-name" type="text" name="name" value="' + fileName +'">');
+                    $("#UploadButton").replaceWith('<input class="btn btn-primary" type="submit" value="Upload">');
+                    $("#file-content").replaceWith('<div id="file-content"><p>File original size: ' + this.files[0].size + ' bytes</p></div>');
+                    readURL(this);
+                    });
+        </script>
+
+
+
+
+
+
+<!--
 		<script type="text/javascript">
                     $('#image-file').bind('change', function() {
                     var _URL = window.URL || window.webkitURL;
                     var input, file;
                     file = this.files[0];
 
-                     <!--
 
-                    var img = new Image();
-                    img = _URL.createObjectURL(file);
-                    var width = img.width,
-                        height = img.height;
-                         -->
-
-                    $("#image-name").replaceWith(
-                    '<input id="image-name" type="text" name="name" value="' + file.name +'">'
-                    );
-
-                    $("#file-content").replaceWith(
-                    '<div id="file-content">' +
-                    '<p>File name: ' + file.name + ' </p>' +
-                    '<p>File size: ' + file.size + ' bytes</p>' +
-                    <!--'<p>Original dimensions: ' + width + 'x' + height + '</p>' +  -->
-                    '</div>');
                     if (file.size > 1024*1024) {
                         alert('This file size is: ' + file.size/1024/1024 + "MB");
                         }
-                        <!-- bodyAppend("p", "File " + file.name + " is " + file.size + " bytes in size"); -->
+                        bodyAppend("p", "File " + file.name + " is " + file.size + " bytes in size");
 
                     readURL(this);
                     });
                 </script>
+-->
 
-		Name: <input id="image-name" type="text" name="name" value="">
-
-		<input type='button' id='btnLoad' value='Get Size' onclick='showFileSize();'>
-
-		<input type="submit" value="Upload"> Press here to upload the file!
-	</form>
-	<div id="file-content"></div>
-
-	<img id="image" src="#" width="300" height="auto" alt="your image" />
-
-
-	<label class="control-label">Select File</label>
-    <input id="input-b5" name="input-b5[]" type="file" multiple>
-    <script>
-    $(document).on('ready', function() {
-        $("#input-b5").fileinput({showCaption: false});
-    });
-    </script>
-
+</div>
 
 </body>
 </html>
