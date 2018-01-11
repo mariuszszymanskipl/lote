@@ -2,7 +2,6 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page session="false" %>
 <html lang="en">
 
@@ -28,7 +27,7 @@ function readURL(input) {
         var reader = new FileReader();
         reader.onload = function (e) {
         var dataUri = e.target.result;
-            $('#image').replaceWith('<img id="image" src=' + dataUri + ' width="300" height="auto"/>');
+            $('#image').replaceWith('<img id="image" src=' + dataUri + ' class="img-responsive"/>');
             getMeta(dataUri);
         }
         reader.readAsDataURL(input.files[0]);
@@ -37,9 +36,10 @@ function readURL(input) {
 
 </script>
 
-
-
 </head>
+
+
+
 <body>
 
 <nav class="navbar navbar-inverse">
@@ -58,22 +58,41 @@ function readURL(input) {
 
 <div class="container">
 
+<div class="row">
+  <div class="col-md-6">
 
-<form method="POST" action="uploadSingleImage" enctype="multipart/form-data">
-    <label class="btn btn-primary" for="ImageFile">
-        <input id="ImageFile" type="file" name="file" style="display:none">
-        Add new image
-    </label>
-    <span id="image-name"></span>
-    <span id="UploadButton"></span>
-</form>
+  <form method="POST" action="uploadSingleImage" enctype="multipart/form-data">
+      <label class="btn btn-primary" for="ImageFile">
+          <input id="ImageFile" type="file" name="file" style="display:none">
+          Add new image
+      </label>
+      <span id="image-name"></span>
+      <span id="UploadButton"></span>
+  </form>
 
-<br><br>
-<span id="image"></span>
-<br><br>
-<span id="file-content"></span>
-<br>
-<span id="file-dimensions"></span>
+<h3>List of images you can use in load tests:</h3>
+<div class="list-group">
+    <c:if test="${not empty images}">
+  		<c:forEach var="image" items="${images}">
+  			<a href="/img?imageName=${image.name}" class="list-group-item">${image.name}</a>
+  		</c:forEach>
+  	</c:if>
+
+</div>
+
+</div>
+
+
+
+  <div class="col-md-6">
+
+  <span id="image"></span>
+  <br>
+  <span id="file-content"></span>
+  <span id="file-dimensions"></span>
+
+  </div>
+</div>
 
 		<script type="text/javascript">
                     $('#ImageFile').bind('change', function() {
