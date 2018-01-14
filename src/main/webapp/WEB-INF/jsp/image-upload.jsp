@@ -10,34 +10,7 @@
 <title>Upload Single Image</title>
 <link rel="stylesheet" type="text/css" href="webjars/bootstrap/3.3.7/css/bootstrap.min.css" />
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-
-
-<script type='text/javascript'>
-
-function getMeta(url){
-    var img = new Image();
-    img.addEventListener("load", function(){
-    $("#file-dimensions").replaceWith('<div id="file-dimensions"><p>File original dimensions: ' + this.naturalWidth + ' x ' + this.naturalHeight + '</p></div>');
-    });
-    img.src = url;
-}
-
-function readURL(input) {
-    if (input.files && input.files[0]) {
-        var reader = new FileReader();
-        reader.onload = function (e) {
-        var dataUri = e.target.result;
-            $('#image').replaceWith('<img id="image" src=' + dataUri + ' class="img-responsive"/>');
-            getMeta(dataUri);
-        }
-        reader.readAsDataURL(input.files[0]);
-    }
-}
-
-</script>
-
 </head>
-
 
 
 <body>
@@ -60,25 +33,27 @@ function readURL(input) {
 
 <div class="row">
   <div class="col-md-6">
-
-  <form method="POST" action="uploadSingleImage" enctype="multipart/form-data">
-      <label class="btn btn-primary" for="ImageFile">
-          <input id="ImageFile" type="file" name="file" style="display:none">
-          Add new image
-      </label>
-      <span id="image-name"></span>
-      <span id="UploadButton"></span>
-  </form>
-
-<h3>List of images you can use in load tests:</h3>
-<div class="list-group">
-    <c:if test="${not empty images}">
-  		<c:forEach var="image" items="${images}">
-  			<a href="/img?imageName=${image.name}" class="list-group-item">${image.name}</a>
-  		</c:forEach>
-  	</c:if>
-
-</div>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title">List of images you can use for load tests:</h3>
+    </div>
+    <div class="list-group">
+        <c:if test="${not empty images}">
+      		<c:forEach var="image" items="${images}">
+      			<a href="#" onclick="document.getElementById('image').src='/img?imageName=${image.name}'; replaceDimensions(123,567)" class="list-group-item" >${image.name}</a>
+      		</c:forEach>
+      	</c:if>
+    </div>
+  </div>
+  <br>
+    <form method="POST" action="uploadSingleImage" enctype="multipart/form-data">
+        <label class="btn btn-primary" for="ImageFile">
+            <input id="ImageFile" type="file" name="file" style="display:none">
+            Add new image
+        </label>
+        <span id="image-name"></span>
+        <span id="UploadButton"></span>
+      </form>
 
 </div>
 
@@ -86,7 +61,10 @@ function readURL(input) {
 
   <div class="col-md-6">
 
-  <span id="image"></span>
+
+<div>
+  <img id="image" class="img-responsive" />
+</div>
   <br>
   <span id="file-content"></span>
   <span id="file-dimensions"></span>
@@ -95,16 +73,42 @@ function readURL(input) {
 </div>
 
 		<script type="text/javascript">
-                    $('#ImageFile').bind('change', function() {
 
+
+
+                    $('#ImageFile').bind('change', function() {
                     var fileName = this.files[0].name;
                     $("#image-name").replaceWith('<input id="image-name" type="text" name="name" value="' + fileName +'">');
                     $("#UploadButton").replaceWith('<input class="btn btn-primary" type="submit" value="Upload">');
                     $("#file-content").replaceWith('<div id="file-content"><p>File original size: ' + this.files[0].size + ' bytes</p></div>');
                     readURL(this);
                     });
-        </script>
 
+        function replaceDimensions(width,height) {
+          document.getElementById('file-dimensions').innerHTML=('<div><p>File original dimensions: ' + width + ' x ' + height + '</p></div>');
+        }
+
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                var dataUri = e.target.result;
+                    $('#image').replaceWith('<img id="image" src=' + dataUri + ' class="img-responsive"/>');
+                    getMeta(dataUri);
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        function getMeta(url){
+            var img = new Image();
+            img.addEventListener("load", function(){
+            replaceDimensions(this.naturalWidth,this.naturalHeight);
+            });
+            img.src = url;
+        }
+
+        </script>
 
 
 
@@ -129,6 +133,14 @@ function readURL(input) {
 -->
 
 </div>
+
+<script>
+$("document").ready( function () {
+<c:if test="${not empty message}">
+alert("${message}");
+</c:if>
+});
+</script>
 
 </body>
 </html>
