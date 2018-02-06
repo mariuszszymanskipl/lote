@@ -1,4 +1,8 @@
 target/
+jMeterTests/
+images/
+results/
+jmeter.log
 !.mvn/wrapper/maven-wrapper.jar
 
 ### STS ###
