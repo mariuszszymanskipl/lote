@@ -60,7 +60,7 @@ public class InputResourceController {
 
         File imageFile = new File(dir.getAbsolutePath() + File.separator + imageName);
 
-        InputStream imageStream = null;
+        InputStream imageStream;
         try {
             imageStream = new BufferedInputStream(new FileInputStream(imageFile));
             imageBytes = IOUtils.toByteArray(imageStream);
@@ -100,11 +100,11 @@ public class InputResourceController {
                 image.setName(name);
                 image.setPath(serverFile.getAbsolutePath());
 
-                logger.info("Server File Location=" + serverFile.getAbsolutePath());
+                logger.info("Image File location on server = " + serverFile.getAbsolutePath());
 
                 String message = "You successfully uploaded new file: " + image.getName();
                 model.addAttribute("message", message);
-                return "upload-confirm";
+                return this.welcome(model);
 
             } catch (Exception e) {
                 String message = "You failed to upload " + name + " => " + e.getMessage();

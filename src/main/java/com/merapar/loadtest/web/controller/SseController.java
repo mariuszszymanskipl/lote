@@ -20,10 +20,10 @@ public class SseController {
 
     private final List<SseEmitter> sseEmitter = JMeterServiceBean.sseEmitter;
 
-    private State state = new State("Starting JMeter load test...");
-
     @RequestMapping(path = "/JMeterTest/{id}", method = RequestMethod.GET)
     public String sseExamplePage(@PathVariable("id") Long id, Map<String, Object> model) {
+        State state = new State("Starting JMeter load test #" + id);
+        log.info("Test number: " + id);
         model.put("state", state);
         return "server-update";
     }

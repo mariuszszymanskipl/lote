@@ -40,7 +40,7 @@
     <div class="list-group">
         <c:if test="${not empty images}">
       		<c:forEach var="image" items="${images}">
-      			<a href="#" onclick="document.getElementById('image').src='/img?imageName=${image.name}'; replaceDimensions(123,567)" class="list-group-item" >${image.name}</a>
+      			<a href="#" onclick="document.getElementById('image').src='/img?imageName=${image.name}'; getMeta('/img?imageName=${image.name}')" class="list-group-item" >${image.name}</a>
       		</c:forEach>
       	</c:if>
     </div>
@@ -74,13 +74,12 @@
 
 		<script type="text/javascript">
 
-
-
                     $('#ImageFile').bind('change', function() {
                     var fileName = this.files[0].name;
+                    var imageSize = this.files[0].size;
                     $("#image-name").replaceWith('<input id="image-name" type="text" name="name" value="' + fileName +'">');
                     $("#UploadButton").replaceWith('<input class="btn btn-primary" type="submit" value="Upload">');
-                    $("#file-content").replaceWith('<div id="file-content"><p>File original size: ' + this.files[0].size + ' bytes</p></div>');
+                    $("#file-content").replaceWith('<div id="file-content"><p>File original size: ' + imageSize + ' bytes</p></div>');
                     readURL(this);
                     });
 
